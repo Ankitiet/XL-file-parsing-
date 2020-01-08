@@ -1,0 +1,29 @@
+parseExcel(file) {  
+  let reader = new FileReader();  
+  reader.onload = (e)=> {  
+    let data = (<any>e.target).result;  
+    let workbook = XLSX.read(data, {  
+      type: 'binary'  
+    });  
+    workbook.SheetNames.forEach((function(sheetName) {  
+      // Here is your object  
+
+      let XL_row_object = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);  
+      let json_object = JSON.stringify(XL_row_object);  
+  
+      // bind the parse excel file data to Grid  
+     // this.gridObj.dataSource = JSON.parse(json_object);
+     console.log(JSON.parse(json_object))
+      this.fillDataInAssumptionForm(JSON.parse(json_object)); 
+    }).bind(this), this);  
+  };  
+
+  reader.onerror = function(ex) {   
+  };  
+  reader.readAsBinaryString(file);  
+};  
+ onSuccess(args: any): void {  
+let files = args.target.files; // FileList object  
+this.parseExcel(files[0]); 
+
+} 
